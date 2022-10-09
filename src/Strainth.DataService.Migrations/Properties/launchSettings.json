@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Strainth.DataService.Migrations": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
