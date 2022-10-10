@@ -31,4 +31,7 @@ Connection string kept in User Secrets for local development
     - **Login:** sa
     - **Password**: *Get this from `sapassword.env` file*
 
+## Visual Studio
+- Customize private class field generation when **Rename** is selected: SO answer [here](https://stackoverflow.com/questions/45736659/how-do-i-customize-visual-studios-private-field-generation-shortcut-for-constru#:~:text=Firstly%20you%20need%20to%20define%20a%20new%20naming,it%20will%20be%20named%20with%20a%20leading%20underscore.)
+
 ## Markdown help available [here](https://www.markdownguide.org/cheat-sheet)

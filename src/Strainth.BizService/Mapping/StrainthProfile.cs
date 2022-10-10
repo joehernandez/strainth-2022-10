@@ -11,6 +11,7 @@ public class StrainthProfile : Profile
     public StrainthProfile()
     {
         CreateMap<Exercise, ExerciseDto>();
+        CreateMap<Category, CategoryDto>();
         CreateMap<ProgramSplitDto, ProgramSplit>();
     }
 }
