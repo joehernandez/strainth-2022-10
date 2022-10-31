@@ -10,5 +10,8 @@ public class StrainthContext : DbContext
     { }
 
     public DbSet<Exercise> Exercises { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<ProgramSplit> ProgramSplits { get; set; }
+    public DbSet<ProgramDetail> ProgramDetails { get; set; }
+    public DbSet<ProgramExercise> ProgramExercises { get; set; }
 }

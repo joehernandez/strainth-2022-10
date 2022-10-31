@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\src\Strainth.BizService\Strainth.BizService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Programming\" />
+  </ItemGroup>
+
 </Project>

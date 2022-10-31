@@ -1,4 +1,4 @@
-using Strainth.BizService.Repositories;
+using Strainth.BizService.Repositories.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StrainthContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("StrainthConnection")));
+
 builder.Services.AddScoped<ExercisesRepository>();
+builder.Services.AddScoped<CategoriesRepository>();
+
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -20,6 +24,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(opts =>
+{
+    opts.AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins("http://localhost:3000");
+});
 
 app.UseAuthorization();
 
