@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+    sqlserver1:
+        build: 
+          context: .
+          dockerfile: dockerfile
+        ports:  
+          - "1433:1433"
+        env_file:
+          - sqlserver.env
+          - sapassword.env
+        volumes: 
+          - sqlsystem:/var/opt/mssql/
+          - sqldata:/var/opt/sqlserver/data
+          - sqllog:/var/opt/sqlserver/log
+          - sqlbackup:/var/opt/sqlserver/backup
+
+    seq-logging:
+        image: datalust/seq:latest
+        ports:
+          - "5341:80"
+        volumes:
+          - seqdata:/data
+        environment:
+          - ACCEPT_EULA=Y
+          # - SA_PASSWORD=Password123
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:
+  seqdata:
