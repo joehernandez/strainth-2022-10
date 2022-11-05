@@ -5,9 +5,9 @@ namespace Strainth.Api.Controllers
 {
     public class CategoriesController : StrainthApiBaseController
     {
-        private readonly CategoriesRepository _categoriesRepository;
+        private readonly ICategoriesRepository _categoriesRepository;
 
-        public CategoriesController(CategoriesRepository categoriesRepository)
+        public CategoriesController(ICategoriesRepository categoriesRepository)
         {
             _categoriesRepository = categoriesRepository;
         }

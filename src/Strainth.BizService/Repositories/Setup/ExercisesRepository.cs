@@ -6,7 +6,7 @@ public enum FilterExercisesBy
     Category
 }
 
-public class ExercisesRepository
+public class ExercisesRepository : IExercisesRepository
 {
     private readonly StrainthContext _strainthContext;
 

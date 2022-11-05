@@ -1,4 +1,4 @@
-﻿namespace Strainth.BizService.Repositories;
+﻿namespace Strainth.BizService.Repositories.Programming;
 
 public class ProgrammingRepository
 {

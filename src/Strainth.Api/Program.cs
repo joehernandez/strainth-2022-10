@@ -8,11 +8,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<StrainthContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("StrainthConnection")));
-
-builder.Services.AddScoped<ExercisesRepository>();
-builder.Services.AddScoped<CategoriesRepository>();
+builder.Services.AddBizService(builder.Configuration);
 
 builder.Services.AddCors();
 

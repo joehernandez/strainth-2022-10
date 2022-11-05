@@ -5,7 +5,8 @@
         None,
         Name
     }
-    public class CategoriesRepository
+
+    public class CategoriesRepository : ICategoriesRepository
     {
         private readonly StrainthContext _strainthContext;
 

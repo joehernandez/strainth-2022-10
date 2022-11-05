@@ -5,9 +5,9 @@ namespace Strainth.Api.Controllers;
 
 public class ExercisesController : StrainthApiBaseController
 {
-    private readonly ExercisesRepository _exerciseRepository;
+    private readonly IExercisesRepository _exerciseRepository;
 
-    public ExercisesController(ExercisesRepository exerciseRepository)
+    public ExercisesController(IExercisesRepository exerciseRepository)
     {
         this._exerciseRepository = exerciseRepository;
     }
