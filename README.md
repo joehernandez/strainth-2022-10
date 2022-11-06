@@ -17,7 +17,11 @@
 - After generating the script, right-click it in **Solution Explorer**, then **Properties > Advanced > Build Action > Embedded resource**
 - To apply the migrations to the database specified in the connection string (see **Configuration** below), run the console app
 ### Configuration
-Connection string kept in User Secrets for local development
+Connection string kept in User Secrets for local development. Use the command line to add user secrets.
+- CD into project directory to add User Secrets to
+- Initialize user secrets: `dotnet user-secrets init`
+- Add a ConnectionStrings setting: `dotnet user-secrets set "ConnectionStrings:StrainthConnection" "Server=.;Database=Strainth;User Id=sa;Password=<Password-here>;"`
+- Get list of user secrets for project: `dotnet user-secrets list`
 
 ## SQL Server
 ### There is a fork of a github repo that has the needed files [here](https://github.com/joehernandez/SqlServerDockerCompose)
