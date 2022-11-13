@@ -1,36 +1,45 @@
+using Serilog;
+using Strainth.Api;
+using Strainth.Api.Build;
+using Strainth.Api.Extensions;
 using Strainth.Api.Middleware;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddBizService(builder.Configuration);
-
-builder.Services.AddCors();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-app.UseMiddleware<ExceptionMiddleware>();
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("Starting up web host");
+    // var builder = WebApplication.CreateBuilder(args);
+    CreateHostBuilder(args).Build().Run();
+
+    // builder.Host.UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
+    // {
+    //     loggerConfiguration.ConfigureBaseLogging(appName, AppVersionInfo.GetBuildInfo());
+    //     loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
+    // });
+    // builder.Host.UseSerilog((context, lc) => lc
+    //     .ReadFrom.Configuration(context.Configuration)
+    //     .Enrich.FromLogContext()
+    //     .WriteTo.Console());
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseCors(opts =>
+static IHostBuilder CreateHostBuilder(string[] args)
 {
-    opts.AllowAnyHeader()
-        .AllowAnyMethod()
-        .WithOrigins("http://localhost:3000");
-});
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+    return Host.CreateDefaultBuilder(args)
+        .UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
+        {
+            loggerConfiguration.ConfigureBaseLogging("Strainth.Api", AppVersionInfo.GetBuildInfo());
+            loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
+        })
+        .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+}
