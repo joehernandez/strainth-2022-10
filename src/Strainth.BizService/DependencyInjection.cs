@@ -6,7 +6,7 @@ using Strainth.BizService.Repositories.UoW;
 namespace Strainth.BizService;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddBizService(this IServiceCollection services, ConfigurationManager config)
+    public static IServiceCollection AddBizService(this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<StrainthContext>(options =>
             options.UseSqlServer(config.GetConnectionString("StrainthConnection")));

@@ -11,18 +11,7 @@ Log.Logger = new LoggerConfiguration()
 try
 {
     Log.Information("Starting up web host");
-    // var builder = WebApplication.CreateBuilder(args);
     CreateHostBuilder(args).Build().Run();
-
-    // builder.Host.UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
-    // {
-    //     loggerConfiguration.ConfigureBaseLogging(appName, AppVersionInfo.GetBuildInfo());
-    //     loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
-    // });
-    // builder.Host.UseSerilog((context, lc) => lc
-    //     .ReadFrom.Configuration(context.Configuration)
-    //     .Enrich.FromLogContext()
-    //     .WriteTo.Console());
 }
 catch (Exception ex)
 {

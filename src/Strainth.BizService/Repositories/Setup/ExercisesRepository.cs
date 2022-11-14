@@ -33,7 +33,7 @@ public class ExercisesRepository : IExercisesRepository
             ? exercisesQuery.Where(c => c.Category.Name == filterValue)
             : null;
 
-        var orderedQuery = (filteredQuery is null ? exercisesQuery : filteredQuery)
+        var orderedQuery = (filteredQuery ?? exercisesQuery)
             .OrderBy(e => e.Category.Name)
             .ThenBy(e => e.Name);
 

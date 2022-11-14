@@ -6,11 +6,14 @@ namespace Strainth.Api.Controllers;
 public class ExercisesController : StrainthApiBaseController
 {
     private readonly IExercisesRepository _exerciseRepository;
+    private readonly ILogger<ExercisesController> _logger;
 
-    public ExercisesController(IExercisesRepository exerciseRepository)
+    public ExercisesController(IExercisesRepository exerciseRepository, ILogger<ExercisesController> logger)
     {
-        this._exerciseRepository = exerciseRepository;
+        _logger = logger;
+        _exerciseRepository = exerciseRepository;
     }
+
     [HttpGet]
     public async Task<ActionResult<List<ExerciseDto>>> GetExercises()
     {
@@ -21,10 +24,18 @@ public class ExercisesController : StrainthApiBaseController
     [HttpGet("{id}")]
     public async Task<ActionResult<ExerciseDto>> GetExercise(int id)
     {
-        if (id <= 0) return BadRequest();
+        var exerciseIdParam = new KeyValuePair<string, int>("exerciseId", id);
+        // TODO: var userIdParam = new KeyValuePair<string, int>("userId", userId);
+        if (id <= 0)
+        {
+            return HandleBadRequest(_logger, new object[] { exerciseIdParam });
+        }
 
         var exerciseDto = await _exerciseRepository.GetSingle(id);
-        if (exerciseDto == null) return NotFound();
+        if (exerciseDto == null)
+        {
+            return HandleNotFoundRequest(_logger, nameof(ExerciseDto), new object[] { exerciseIdParam });
+        }
 
         return Ok(exerciseDto);
     }

@@ -24,9 +24,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        // TODO: re-enable and check logs
-        // app.UseSerilogRequestLogging();
-
         app.UseMiddleware<ExceptionMiddleware>();
 
         if (env.IsDevelopment())
