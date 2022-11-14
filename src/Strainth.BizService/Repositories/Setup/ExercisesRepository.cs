@@ -20,8 +20,7 @@ public class ExercisesRepository : IExercisesRepository
         var exercise = await _strainthContext.Exercises
             .FirstOrDefaultAsync(e => e.Id == id);
 
-        var exerciseDto = StrainthMapping.Mapper.Map<ExerciseDto>(exercise);
-        return exerciseDto;
+        return StrainthMapping.Mapper.Map<ExerciseDto>(exercise);
     }
 
     public IQueryable<ExerciseDto> GetMany(FilterExercisesBy filterBy = FilterExercisesBy.None, string filterValue = "")
