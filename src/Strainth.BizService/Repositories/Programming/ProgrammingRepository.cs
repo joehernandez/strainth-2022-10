@@ -1,6 +1,4 @@
-﻿using Strainth.DataService.Data;
-
-namespace Strainth.BizService;
+﻿namespace Strainth.BizService.Repositories.Programming;
 
 public class ProgrammingRepository
 {
@@ -8,7 +6,7 @@ public class ProgrammingRepository
 
     public ProgrammingRepository(StrainthContext strainthContext)
     {
-        this._strainthContext = strainthContext;
+        _strainthContext = strainthContext;
     }
 
 

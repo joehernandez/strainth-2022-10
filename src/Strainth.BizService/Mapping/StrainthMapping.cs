@@ -15,6 +15,7 @@ public static class StrainthMapping
     });
 
     public static IMapper Mapper = Lazy.Value;
+    public static IConfigurationProvider Config = Mapper.ConfigurationProvider;
 }
 
 /*

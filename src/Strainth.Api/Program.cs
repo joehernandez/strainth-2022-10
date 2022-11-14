@@ -1,23 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+using Serilog;
+using Strainth.Api;
+using Strainth.Api.Build;
+using Strainth.Api.Extensions;
+using Strainth.Api.Middleware;
 
-// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("Starting up web host");
+    CreateHostBuilder(args).Build().Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+static IHostBuilder CreateHostBuilder(string[] args)
+{
+    return Host.CreateDefaultBuilder(args)
+        .UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
+        {
+            loggerConfiguration.ConfigureBaseLogging("Strainth.Api", AppVersionInfo.GetBuildInfo());
+            loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
+        })
+        .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+}
