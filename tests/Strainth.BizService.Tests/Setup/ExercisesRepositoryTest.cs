@@ -2,16 +2,25 @@ namespace Strainth.BizService.Tests.Setup;
 
 public class ExercisesRepositoryTest
 {
+    private readonly Mock<ILogger<ExercisesRepository>> _loggerMock;
+    private readonly StrainthContext _strainthContext;
+    private readonly ExercisesRepository _exercisesRepository;
+
+    public ExercisesRepositoryTest()
+    {
+        _loggerMock = new Mock<ILogger<ExercisesRepository>>();
+        var options = SqliteInMemory.CreateOptions<StrainthContext>();
+        _strainthContext = new StrainthContext(options);
+        _exercisesRepository = new ExercisesRepository(_strainthContext, _loggerMock.Object);
+    }
+
     [Fact]
     public async Task GetMany_Exercises_Should_Get_All_Seeded_When_Not_Filtered()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercises = await exerciseRepository.GetMany().ToListAsync();
+        DevTestData.SeedTestData(_strainthContext);
+        var exercises = await _exercisesRepository.GetMany().ToListAsync();
 
         exercises.Count.Should().Be(27);
     }
@@ -19,28 +28,22 @@ public class ExercisesRepositoryTest
     [Fact]
     public async Task GetMany_Exercises_Should_Project_CategoryName()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercises = await exerciseRepository.GetMany().ToListAsync();
+        DevTestData.SeedTestData(_strainthContext);
+        var exerciseDtos = await _exercisesRepository.GetMany().ToListAsync();
 
-        exercises.First().CategoryName.Should().NotBeNullOrEmpty();
+        exerciseDtos[0].CategoryName.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
     public async Task GetMany_Exercises_Should_OrderBy_CategoryThenExercise()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercises = await exerciseRepository.GetMany().ToListAsync();
-        var firstExercise = exercises.First();
+        DevTestData.SeedTestData(_strainthContext);
+        var exercises = await _exercisesRepository.GetMany().ToListAsync();
+        var firstExercise = exercises[0];
 
         using var assertionScope = new AssertionScope();
         firstExercise.CategoryName.Should().Be("Abs");
@@ -50,13 +53,10 @@ public class ExercisesRepositoryTest
     [Fact]
     public async Task GetMany_Exercises_Should_FilterBy_Category_When_Provided()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercises = await exerciseRepository.GetMany(FilterExercisesBy.Category, "Abs").ToListAsync();
+        DevTestData.SeedTestData(_strainthContext);
+        var exercises = await _exercisesRepository.GetMany(FilterExercisesBy.Category, "Abs").ToListAsync();
 
         using var assertionScope = new AssertionScope();
         exercises.Count.Should().Be(2);
@@ -66,13 +66,10 @@ public class ExercisesRepositoryTest
     [Fact]
     public async Task GetSingle_Exercise_Should_Not_Be_Null_For_Valid_Id()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercise = await exerciseRepository.GetSingle(1);
+        DevTestData.SeedTestData(_strainthContext);
+        var exercise = await _exercisesRepository.GetSingle(1);
 
         exercise.Should().NotBeNull();
     }
@@ -80,14 +77,22 @@ public class ExercisesRepositoryTest
     [Fact]
     public async Task GetSingle_Exercise_Should_Be_Null_For_Invalid_Id()
     {
-        var options = SqliteInMemory.CreateOptions<StrainthContext>();
-        using var context = new StrainthContext(options);
-        context.Database.EnsureCreated();
+        _strainthContext.Database.EnsureCreated();
 
-        DevTestData.SeedTestData(context);
-        var exerciseRepository = new ExercisesRepository(context);
-        var exercise = await exerciseRepository.GetSingle(1000000);
+        DevTestData.SeedTestData(_strainthContext);
+        var exercise = await _exercisesRepository.GetSingle(1000000);
 
         exercise.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetSingle_Exercise_Should_Project_CategoryName()
+    {
+        _strainthContext.Database.EnsureCreated();
+
+        DevTestData.SeedTestData(_strainthContext);
+        var exerciseDto = await _exercisesRepository.GetSingle(1);
+
+        exerciseDto.CategoryName.Should().NotBeNullOrEmpty();
     }
 }

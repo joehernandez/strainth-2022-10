@@ -1,4 +1,6 @@
-﻿namespace Strainth.BizService.Repositories.Setup;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Strainth.BizService.Repositories.Setup;
 
 public enum FilterExercisesBy
 {
@@ -9,15 +11,18 @@ public enum FilterExercisesBy
 public class ExercisesRepository : IExercisesRepository
 {
     private readonly StrainthContext _strainthContext;
+    private readonly ILogger<ExercisesRepository> _logger;
 
-    public ExercisesRepository(StrainthContext strainthContext)
+    public ExercisesRepository(StrainthContext strainthContext, ILogger<ExercisesRepository> logger)
     {
+        _logger = logger;
         _strainthContext = strainthContext;
     }
 
     public async Task<ExerciseDto> GetSingle(int id)
     {
         var exercise = await _strainthContext.Exercises
+            .Include(e => e.Category)
             .FirstOrDefaultAsync(e => e.Id == id);
 
         return StrainthMapping.Mapper.Map<ExerciseDto>(exercise);
@@ -36,7 +41,6 @@ public class ExercisesRepository : IExercisesRepository
             .OrderBy(e => e.Category.Name)
             .ThenBy(e => e.Name);
 
-        var projectedQuery = orderedQuery.ProjectTo<ExerciseDto>(StrainthMapping.Config);
-        return projectedQuery;
+        return orderedQuery.ProjectTo<ExerciseDto>(StrainthMapping.Config);
     }
 }

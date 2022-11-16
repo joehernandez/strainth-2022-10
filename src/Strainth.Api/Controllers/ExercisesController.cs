@@ -18,7 +18,7 @@ public class ExercisesController : StrainthApiBaseController
     public async Task<ActionResult<List<ExerciseDto>>> GetExercises()
     {
         var exerciseDtos = await _exerciseRepository.GetMany().ToListAsync();
-        return exerciseDtos;
+        return Ok(exerciseDtos);
     }
 
     [HttpGet("{id}")]

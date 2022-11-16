@@ -1,6 +1,9 @@
 global using FluentAssertions;
 global using FluentAssertions.Execution;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using Strainth.BizService.DTOs.Setup;
 global using Strainth.BizService.Repositories.Setup;
 global using Strainth.DataService.Data;
 global using Strainth.DataService.Data.SeedData;
