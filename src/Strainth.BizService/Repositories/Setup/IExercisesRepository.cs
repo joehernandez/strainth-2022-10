@@ -3,4 +3,5 @@ public interface IExercisesRepository
 {
     IQueryable<ExerciseDto> GetMany(FilterExercisesBy filterBy = FilterExercisesBy.None, string filterValue = "");
     Task<ExerciseDto> GetSingle(int id);
+    Task<ExerciseDto> Add(ExerciseDto exerciseDto);
 }

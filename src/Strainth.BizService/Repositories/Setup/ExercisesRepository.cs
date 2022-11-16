@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Strainth.DataService.Entities.Setup;
 
 namespace Strainth.BizService.Repositories.Setup;
 
@@ -42,5 +43,24 @@ public class ExercisesRepository : IExercisesRepository
             .ThenBy(e => e.Name);
 
         return orderedQuery.ProjectTo<ExerciseDto>(StrainthMapping.Config);
+    }
+
+    public async Task<ExerciseDto> Add(ExerciseDto exerciseDto)
+    {
+        var existingExercise = await _strainthContext.Exercises.FirstOrDefaultAsync(e => e.Name == exerciseDto.Name);
+        if (existingExercise != null) return exerciseDto;
+
+        try
+        {
+            var exercise = StrainthMapping.Mapper.Map<Exercise>(exerciseDto);
+            _strainthContext.Exercises.Add(exercise);
+            await _strainthContext.SaveChangesAsync();
+            return StrainthMapping.Mapper.Map<ExerciseDto>(exercise);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error adding exercise with ExerciseDto: {exerciseDto}", exerciseDto);
+            return null;
+        }
     }
 }
