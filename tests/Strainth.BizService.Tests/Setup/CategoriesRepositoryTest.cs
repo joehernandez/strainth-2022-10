@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Moq;
-using Strainth.BizService.DTOs.Setup;
-
-namespace Strainth.BizService.Tests.Setup
+﻿namespace Strainth.BizService.Tests.Setup
 {
     public class CategoriesRepositoryTest
     {

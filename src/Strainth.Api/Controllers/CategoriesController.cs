@@ -39,13 +39,13 @@ namespace Strainth.Api.Controllers
         public async Task<ActionResult> AddCategory(CategoryDto categoryDto)
         {
             var newCategory = await _categoriesRepository.Add(categoryDto);
-            if (newCategory == null)
+            if (newCategory.Id <= 0)
             {
                 var categoryDtoParam = new KeyValuePair<string, CategoryDto>("categoryDto", categoryDto);
-                HandleBadRequest(_logger, new object[] { categoryDtoParam });
+                return HandleBadRequest(_logger, new object[] { categoryDtoParam });
             }
 
-            return CreatedAtRoute(nameof(GetCategory), new { id = newCategory.Id }, newCategory);
+            return CreatedAtAction(nameof(GetCategory), new { id = newCategory.Id }, newCategory);
         }
     }
 }
