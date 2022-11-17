@@ -27,12 +27,12 @@ namespace Strainth.Api.Controllers
             var categoryIdParam = new KeyValuePair<string, int>("categoryId", id);
             if (id <= 0) return HandleBadRequest(_logger, new object[] { categoryIdParam });
 
-            var categoryDtos = await _categoriesRepository.GetSingle(id);
-            if (categoryDtos == null)
+            var categoryDto = await _categoriesRepository.GetSingle(id);
+            if (categoryDto == null)
             {
                 return HandleNotFoundRequest(_logger, nameof(CategoryDto), new object[] { categoryIdParam });
             }
-            return Ok(categoryDtos);
+            return Ok(categoryDto);
         }
 
         [HttpPost]
