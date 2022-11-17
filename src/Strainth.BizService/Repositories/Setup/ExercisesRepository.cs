@@ -55,7 +55,7 @@ public class ExercisesRepository : IExercisesRepository
             var exercise = StrainthMapping.Mapper.Map<Exercise>(exerciseDto);
             _strainthContext.Exercises.Add(exercise);
             await _strainthContext.SaveChangesAsync();
-            return StrainthMapping.Mapper.Map<ExerciseDto>(exercise);
+            return await GetSingle(exercise.Id);
         }
         catch (Exception e)
         {

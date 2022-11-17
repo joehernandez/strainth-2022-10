@@ -80,17 +80,20 @@ public class ExercisesRepositoryTest
     [Fact]
     public async Task Add_Creates_New_Exercise_When_NonDuplicate_IsAdded()
     {
+        var categoryDto = await _strainthContext.Categories.FirstAsync();
         var exerciseDto = new ExerciseDto
         {
             Name = "Test Exercise",
-            CategoryName = "Abs",
-            CategoryId = 1
+            CategoryName = categoryDto.Name,
+            CategoryId = categoryDto.Id,
         };
         var totalExercises = await _exercisesRepository.GetMany().CountAsync();
         var newExercise = await _exercisesRepository.Add(exerciseDto);
         var newTotalExercises = await _exercisesRepository.GetMany().CountAsync();
 
         newExercise.Id.Should().BeGreaterThan(0);
+        newExercise.Name.Should().Be(exerciseDto.Name);
+        newExercise.CategoryName.Should().Be(exerciseDto.CategoryName);
         newTotalExercises.Should().Be(totalExercises + 1);
     }
 

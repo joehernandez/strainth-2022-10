@@ -39,4 +39,17 @@ public class ExercisesController : StrainthApiBaseController
 
         return Ok(exerciseDto);
     }
+
+    [HttpPost]
+    public async Task<ActionResult> AddExercise(ExerciseDto exerciseDto)
+    {
+        var newExercise = await _exerciseRepository.Add(exerciseDto);
+        if (newExercise.Id <= 0)
+        {
+            var exerciseDtoParam = new KeyValuePair<string, ExerciseDto>("exerciseDto", exerciseDto);
+            return HandleBadRequest(_logger, new object[] { exerciseDtoParam });
+        }
+
+        return CreatedAtAction(nameof(GetExercise), new { id = newExercise.Id }, newExercise);
+    }
 }
